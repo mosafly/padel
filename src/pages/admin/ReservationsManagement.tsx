@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useSupabase } from "@/contexts/SupabaseContext";
-import ReservationList from "@/components/ReservationList";
+import { useSupabase } from "@/lib/contexts/Supabase";
+import ReservationList from "@/components/booking/ReservationList";
 import { Calendar, Filter } from "lucide-react";
 import { addDays, format, subDays } from "date-fns";
 import toast from "react-hot-toast";

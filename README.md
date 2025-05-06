@@ -1,63 +1,64 @@
-# Padel Bolt App
+# Padelsociety.ci
 
-Application de réservation de courts de padel avec intégration du système de paiement Lomi.
+An application for booking padel courts, featuring seamless integration with the lomi. payment stack.
 
-## Configuration requise
+## Overview
 
-- Node.js v16 ou supérieur
-- Compte Supabase
-- Compte Lomi pour les paiements
+padelsociety.ci is a modern web application designed to streamline the process of reserving padel courts. Users can browse available courts, make bookings, and handle payments securely. Administrators have tools to manage reservations and oversee the platform.
 
-## Installation
+This project is built with:
 
-1. Clonez ce dépôt
-2. Installez les dépendances:
-   ```bash
-   npm install
-   ```
-3. Créez un fichier `.env` basé sur le fichier `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
-4. Remplissez les variables d'environnement dans le fichier `.env` avec vos propres clés
+-   **Frontend**: React, TS
+-   **Backend**: Supabase
+-   **Styling**: Tailwind CSS + Shadcn
+-   **Payments**: lomi.
+-   **Emails**: Resend
 
-## Configuration de Supabase
+## Features
 
-1. Créez un projet sur [Supabase](https://supabase.com)
-2. Exécutez les migrations SQL pour configurer votre base de données
-3. Configurez les fonctions Edge dans votre projet Supabase:
-   - `lomi_create_session`: Sert de proxy pour créer des sessions de paiement Lomi
-   - `lomi_webhook`: Gère les callbacks de Lomi pour mettre à jour le statut des paiements
+-   User registration and authentication.
+-   Browse and search for available padel courts.
+-   Real-time court booking system.
+-   Secure payment processing via lomi. integration.
+-   User dashboard to manage existing reservations.
+-   Admin panel for managing courts, users, and all reservations (confirm/cancel).
+-   Responsive design for accessibility on various devices.
 
-## Configuration de Lomi
+## Getting Started
 
-1. Créez un compte sur [Lomi](https://lomi.africa)
-2. Obtenez votre clé API Lomi
-3. Configurez les variables d'environnement Lomi dans votre fichier `.env`
+Follow these instructions to get a local copy up and running for development and testing purposes.
 
-## Fonctions Edge Supabase
+### Prerequisites
 
-Pour les fonctions Edge de Supabase, vous devez configurer les variables d'environnement dans l'interface de Supabase:
+-   Node.js (v16 or higher recommended)
+-   An active Supabase account
+-   An active lomi. account for payment processing
 
-1. LOMI_API_URL: URL de l'API Lomi (généralement https://api.lomi.africa)
-2. LOMI_SECRET_KEY: Votre clé secrète Lomi
-3. SUPABASE_URL: L'URL de votre projet Supabase
-4. SUPABASE_SERVICE_ROLE_KEY: La clé de service de votre projet Supabase
+### Installation
 
-## Développement local
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/lomiafrica/booking
+    cd booking
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pnpm install
+    ```
+
+3.  **Set up environment variables:**
+    Create a `.env` file by copying the example file:
+    ```bash
+    cp .env.example .env
+    ```
+    Populate the `.env` file with your credentials and configuration details for Supabase and lomi. Refer to `.env.example` for the required variables.
+
+### Running Locally
+
+To start the development server:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
-
-## Intégration Lomi
-
-L'application utilise Lomi comme système de paiement avec Wave comme méthode de paiement par défaut. En développement local, un mode de simulation est activé automatiquement pour faciliter les tests sans effectuer de vrais paiements.
-
-### Mode Simulation
-
-En mode local ou lorsque le paramètre `simulation` est défini à `true` lors de la création d'une session de paiement, l'application utilise une page de simulation au lieu d'appeler l'API Lomi. Cela vous permet de tester le flux de paiement sans utiliser de vrais moyens de paiement.
-
-### Mode Production
-
-En production, l'application utilise les fonctions Edge de Supabase comme proxy pour contourner les problèmes CORS lors des appels à l'API Lomi.
+The application should now be running on your local development server (usually `http://localhost:5173` or similar).

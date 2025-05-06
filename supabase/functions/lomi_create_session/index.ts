@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.170.0/http/server.ts";
-import { corsHeaders } from "@/_shared/cors.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
-// Utiliser une valeur par défaut pour l'URL de l'API Lomi
+// Utiliser une valeur par défaut pour l'URL de l'API lomi.
 const LOMI_API_URL = Deno.env.get("LOMI_API_URL") || "https://api.lomi.africa";
 // Utiliser la variable d'environnement pour la clé secrète
 const LOMI_SECRET_KEY = Deno.env.get("LOMI_SECRET_KEY");
@@ -32,14 +32,14 @@ serve(async (req: Request) => {
       throw new Error("Missing required parameters");
     }
 
-    console.log("Creating Lomi session with params:", {
+    console.log("Creating lomi. session with params:", {
       amount,
       currency,
       callback_url,
       payment_methods,
     });
 
-    // Appeler l'API Lomi pour créer une session
+    // Appeler l'API lomi. pour créer une session
     const response = await fetch(`${LOMI_API_URL}/v1/sessions`, {
       method: "POST",
       headers: {
@@ -55,16 +55,16 @@ serve(async (req: Request) => {
       }),
     });
 
-    console.log("Lomi API response status:", response.status);
+    console.log("lomi. API response status:", response.status);
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Lomi API error:", errorData);
-      throw new Error(`Lomi API error: ${JSON.stringify(errorData)}`);
+      console.error("lomi. API error:", errorData);
+      throw new Error(`lomi. API error: ${JSON.stringify(errorData)}`);
     }
 
     const sessionData = await response.json();
-    console.log("Lomi session created successfully:", sessionData);
+    console.log("lomi. session created successfully:", sessionData);
 
     // Retourner la réponse avec les headers CORS
     return new Response(JSON.stringify(sessionData), {

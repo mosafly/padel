@@ -6,13 +6,13 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { SupabaseProvider } from "./contexts/SupabaseContext";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import ErrorBoundary from "./components/ErrorBoundary";
+import { SupabaseProvider } from "./lib/contexts/Supabase";
+import { AuthProvider, useAuth } from "./lib/contexts/Auth";
+import ErrorBoundary from "./components/booking/ErrorBoundary";
 
 // Layouts
-import ClientLayout from "./layouts/ClientLayout";
-import AdminLayout from "./layouts/AdminLayout";
+import ClientLayout from "./lib/layouts/ClientLayout";
+import AdminLayout from "./lib/layouts/AdminLayout";
 
 // Client Pages
 import HomePage from "./pages/client/HomePage";

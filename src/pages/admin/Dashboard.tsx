@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useSupabase } from "@/lib/contexts/Supabase";
 import { format } from "date-fns";
 import {
   AreaChart,
@@ -17,7 +17,7 @@ import {
   Users,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { Court } from "@/components/CourtCard";
+import { Court } from "@/components/booking/CourtCard";
 
 interface DashboardStat {
   icon: React.ReactNode;
@@ -287,13 +287,12 @@ const Dashboard: React.FC = () => {
                 >
                   <p className="font-medium">{court.name}</p>
                   <span
-                    className={`badge ${
-                      court.status === "available"
-                        ? "badge-success"
-                        : court.status === "maintenance"
-                          ? "badge-danger"
-                          : "badge-accent"
-                    }`}
+                    className={`badge ${court.status === "available"
+                      ? "badge-success"
+                      : court.status === "maintenance"
+                        ? "badge-danger"
+                        : "badge-accent"
+                      }`}
                   >
                     {court.status.charAt(0).toUpperCase() +
                       court.status.slice(1)}

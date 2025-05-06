@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useSupabase } from "@/lib/contexts/Supabase";
 import { Plus, Edit, Trash, Check, X } from "lucide-react";
-import CourtForm, { CourtFormData } from "@/components/CourtForm";
-import { Court } from "@/components/CourtCard";
+import CourtForm, { CourtFormData } from "@/components/booking/CourtForm";
+import { Court } from "@/components/booking/CourtCard";
 import toast from "react-hot-toast";
 
 const CourtsManagement: React.FC = () => {
@@ -177,9 +177,9 @@ const CourtsManagement: React.FC = () => {
             initialData={
               editingCourt
                 ? {
-                    ...editingCourt,
-                    image_url: editingCourt.image_url || "",
-                  }
+                  ...editingCourt,
+                  image_url: editingCourt.image_url || "",
+                }
                 : undefined
             }
             onSubmit={handleSubmit}
@@ -233,13 +233,12 @@ const CourtsManagement: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`badge ${
-                        court.status === "available"
-                          ? "badge-success"
-                          : court.status === "maintenance"
-                            ? "badge-danger"
-                            : "badge-accent"
-                      }`}
+                      className={`badge ${court.status === "available"
+                        ? "badge-success"
+                        : court.status === "maintenance"
+                          ? "badge-danger"
+                          : "badge-accent"
+                        }`}
                     >
                       {court.status.charAt(0).toUpperCase() +
                         court.status.slice(1)}
@@ -251,11 +250,10 @@ const CourtsManagement: React.FC = () => {
                         onClick={() =>
                           handleStatusToggle(court.id, court.status)
                         }
-                        className={`p-1 rounded-full ${
-                          court.status === "available"
-                            ? "text-red-600 hover:bg-red-100"
-                            : "text-green-600 hover:bg-green-100"
-                        }`}
+                        className={`p-1 rounded-full ${court.status === "available"
+                          ? "text-red-600 hover:bg-red-100"
+                          : "text-green-600 hover:bg-green-100"
+                          }`}
                         title={
                           court.status === "available"
                             ? "Set to maintenance"

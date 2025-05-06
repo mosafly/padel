@@ -1,6 +1,6 @@
 /**
- * Lomi Payment Client
- * A client-side implementation for interacting with the Lomi payment API
+ * lomi. Payment Client
+ * A client-side implementation for interacting with the lomi. payment API
  */
 
 interface LomiSessionCreateParams {
@@ -20,7 +20,7 @@ class LomiClient {
   private apiKey: string;
   // URL de Supabase pour les fonctions Edge
   private supabaseUrl: string = import.meta.env.VITE_SUPABASE_URL || "";
-  // Environnement Lomi (production, development, etc.)
+  // Environnement lomi. (production, development, etc.)
   private env: string = import.meta.env.VITE_LOMI_ENV || "production";
 
   constructor(apiKey: string) {
@@ -29,18 +29,18 @@ class LomiClient {
       "LomiClient initialized with API key:",
       apiKey ? "API key provided" : "No API key",
     );
-    console.log("Lomi environment:", this.env);
+    console.log("lomi. environment:", this.env);
 
     if (!apiKey) {
       console.warn(
-        "Lomi API key is not provided. Payment functionality will not work correctly.",
+        "lomi. API key is not provided. Payment functionality will not work correctly.",
       );
     }
   }
 
   async sessionsCreate(params: LomiSessionCreateParams): Promise<LomiSession> {
     try {
-      console.log("Creating Lomi payment session with params:", {
+      console.log("Creating lomi. payment session with params:", {
         amount: params.amount,
         currency: params.currency,
         callback_url: params.callback_url,
@@ -49,7 +49,7 @@ class LomiClient {
 
       if (!this.apiKey) {
         throw new Error(
-          "Lomi API key is not configured. Please check your environment variables.",
+          "lomi. API key is not configured. Please check your environment variables.",
         );
       }
 
@@ -61,7 +61,7 @@ class LomiClient {
 
       if (params.simulation || isLocalhost) {
         console.log(
-          "⚠️ USING SIMULATED LOMI API RESPONSE (Simulation mode or local development)",
+          "⚠️ USING SIMULATED lomi. API RESPONSE (Simulation mode or local development)",
         );
 
         // Extraire le reservationId de l'URL de callback
@@ -75,12 +75,12 @@ class LomiClient {
           status: "pending",
         };
 
-        console.log("Simulated Lomi session created:", simulatedSession);
+        console.log("Simulated lomi. session created:", simulatedSession);
         return simulatedSession;
       }
 
-      // Mode réel - utilisation de la fonction Edge Supabase comme proxy pour l'API Lomi
-      console.log("Using Supabase Edge Function as proxy for Lomi API");
+      // Mode réel - utilisation de la fonction Edge Supabase comme proxy pour l'API lomi.
+      console.log("Using Supabase Edge Function as proxy for lomi. API");
 
       // Préparer les données pour la requête
       const requestBody = {
@@ -90,9 +90,9 @@ class LomiClient {
         payment_methods: ["wave"],
       };
 
-      console.log("Lomi API request body:", JSON.stringify(requestBody));
+      console.log("lomi. API request body:", JSON.stringify(requestBody));
 
-      // Appeler la fonction Edge Supabase qui servira de proxy pour l'API Lomi
+      // Appeler la fonction Edge Supabase qui servira de proxy pour l'API lomi.
       const response = await fetch(
         `${this.supabaseUrl}/functions/v1/lomi_create_session`,
         {
@@ -132,7 +132,7 @@ class LomiClient {
       }
 
       const data = await response.json();
-      console.log("Lomi session created successfully:", data);
+      console.log("lomi. session created successfully:", data);
       return data;
     } catch (error: unknown) {
       // Amélioration de la journalisation des erreurs
@@ -146,7 +146,7 @@ class LomiClient {
         errorStackToLog = error.stack || "No stack trace available";
       }
 
-      console.error("Lomi payment session creation error:", {
+      console.error("lomi. payment session creation error:", {
         name: errorNameToLog,
         message: errorMessageToLog,
         stack: errorStackToLog,

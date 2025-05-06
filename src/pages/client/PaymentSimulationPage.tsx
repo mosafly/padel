@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import toast from "react-hot-toast";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useSupabase } from "@/lib/contexts/Supabase";
 
 const PaymentSimulationPage: React.FC = () => {
   const [searchParams] = useSearchParams();

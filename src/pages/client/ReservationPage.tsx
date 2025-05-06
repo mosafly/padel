@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { addDays, format, startOfDay } from "date-fns";
-import { useSupabase } from "@/contexts/SupabaseContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { Court } from "@/components/CourtCard";
-import TimeSlotPicker from "@/components/TimeSlotPicker";
+import { useSupabase } from "@/lib/contexts/Supabase";
+import { useAuth } from "@/lib/contexts/Auth";
+import { Court } from "@/components/booking/CourtCard";
+import TimeSlotPicker from "@/components/booking/TimeSlotPicker";
 import { Calendar, Clock, DollarSign } from "lucide-react";
 import toast from "react-hot-toast";
-import PaymentMethodSelector from "@/components/PaymentMethodSelector";
-import LomiClient from "@/services/lomiClient";
+import PaymentMethodSelector from "@/components/booking/PaymentMethodSelector";
+import LomiClient from "@/utils/lomi./client";
 
 const ReservationPage: React.FC = () => {
   const { courtId } = useParams();
@@ -16,7 +16,7 @@ const ReservationPage: React.FC = () => {
   const { supabase } = useSupabase();
   const { user } = useAuth();
 
-  // Déboguer la clé API Lomi
+  // Déboguer la clé API lomi.
   console.log(
     "VITE_LOMI_SECRET_KEY available?",
     !!import.meta.env.VITE_LOMI_SECRET_KEY,
@@ -221,15 +221,15 @@ const ReservationPage: React.FC = () => {
 
       console.log("Reservation created successfully:", reservationData);
 
-      // Initialize payment with Lomi
-      console.log("Initializing Lomi payment session...");
+      // Initialize payment with lomi.
+      console.log("Initializing payment session...");
 
       // Détecter si nous sommes en local ou en production
       const isLocalhost =
         window.location.hostname === "localhost" ||
         window.location.hostname === "127.0.0.1";
 
-      // Utiliser l'API réelle de Lomi en production avec Wave comme moyen de paiement
+      // Utiliser l'API réelle de lomi. en production avec Wave comme moyen de paiement
       const session = await lomiClient.sessionsCreate({
         amount: totalPrice * 100,
         currency: "XOF",
@@ -238,7 +238,7 @@ const ReservationPage: React.FC = () => {
         simulation: isLocalhost,
       });
 
-      console.log("Lomi session created:", session);
+      console.log("lomi. session created:", session);
 
       // Create payment record
       const { data: paymentData, error: paymentError } = await supabase
@@ -299,7 +299,7 @@ const ReservationPage: React.FC = () => {
   const hours =
     selectedStartTime && selectedEndTime
       ? (selectedEndTime.getTime() - selectedStartTime.getTime()) /
-        (1000 * 60 * 60)
+      (1000 * 60 * 60)
       : 0;
   const totalPrice = court ? court.price_per_hour * hours : 0;
 

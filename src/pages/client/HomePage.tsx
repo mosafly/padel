@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSupabase } from "@/contexts/SupabaseContext";
-import CourtCard, { Court } from "@/components/CourtCard";
+import { useSupabase } from "@/lib/contexts/Supabase";
+import CourtCard, { Court } from "@/components/booking/CourtCard";
 import { Search, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -133,8 +133,8 @@ const HomePage: React.FC = () => {
         >
           <p className="text-red-500 mb-4">{error}</p>
           {error.includes("auth") ||
-          error.includes("credentials") ||
-          error.includes("session") ? (
+            error.includes("credentials") ||
+            error.includes("session") ? (
             <div>
               <p className="text-gray-600 mb-4">
                 Vous devez être connecté pour voir les courts.

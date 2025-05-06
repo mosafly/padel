@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSupabase } from "@/contexts/SupabaseContext";
+import { useSupabase } from "@/lib/contexts/Supabase";
 import { format, subMonths, startOfMonth, endOfMonth } from "date-fns";
 import {
   BarChart,

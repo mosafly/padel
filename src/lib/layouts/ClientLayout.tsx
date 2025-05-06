@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { Brackets as Racket, Calendar, LogOut } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/lib/contexts/Auth";
 import toast from "react-hot-toast";
 
 const ClientLayout: React.FC = () => {
@@ -70,10 +70,9 @@ const ClientLayout: React.FC = () => {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${
-                    isActive
-                      ? "border-[var(--primary)] text-[var(--primary)]"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${isActive
+                    ? "border-[var(--primary)] text-[var(--primary)]"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`
                 }
               >
@@ -84,10 +83,9 @@ const ClientLayout: React.FC = () => {
               <NavLink
                 to="/my-reservations"
                 className={({ isActive }) =>
-                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${
-                    isActive
-                      ? "border-[var(--primary)] text-[var(--primary)]"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${isActive
+                    ? "border-[var(--primary)] text-[var(--primary)]"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`
                 }
               >
