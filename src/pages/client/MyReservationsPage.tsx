@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSupabase } from "@/lib/contexts/Supabase";
 import { useAuth } from "@/lib/contexts/Auth";
-import ReservationList, { Reservation } from "@/components/booking/ReservationList";
+import ReservationList, {
+  Reservation,
+} from "@/components/booking/ReservationList";
 import toast from "react-hot-toast";
 
 const MyReservationsPage: React.FC = () => {

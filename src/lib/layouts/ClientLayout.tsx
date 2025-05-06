@@ -70,9 +70,10 @@ const ClientLayout: React.FC = () => {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${isActive
-                    ? "border-[var(--primary)] text-[var(--primary)]"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${
+                    isActive
+                      ? "border-[var(--primary)] text-[var(--primary)]"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`
                 }
               >
@@ -83,9 +84,10 @@ const ClientLayout: React.FC = () => {
               <NavLink
                 to="/my-reservations"
                 className={({ isActive }) =>
-                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${isActive
-                    ? "border-[var(--primary)] text-[var(--primary)]"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${
+                    isActive
+                      ? "border-[var(--primary)] text-[var(--primary)]"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`
                 }
               >
@@ -104,7 +106,8 @@ const ClientLayout: React.FC = () => {
       <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Padel Society — All rights reserved.
+            &copy; {new Date().getFullYear()} Padel Society — All rights
+            reserved.
           </p>
         </div>
       </footer>

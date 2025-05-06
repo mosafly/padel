@@ -299,7 +299,7 @@ const ReservationPage: React.FC = () => {
   const hours =
     selectedStartTime && selectedEndTime
       ? (selectedEndTime.getTime() - selectedStartTime.getTime()) /
-      (1000 * 60 * 60)
+        (1000 * 60 * 60)
       : 0;
   const totalPrice = court ? court.price_per_hour * hours : 0;
 

@@ -133,8 +133,8 @@ const HomePage: React.FC = () => {
         >
           <p className="text-red-500 mb-4">{error}</p>
           {error.includes("auth") ||
-            error.includes("credentials") ||
-            error.includes("session") ? (
+          error.includes("credentials") ||
+          error.includes("session") ? (
             <div>
               <p className="text-gray-600 mb-4">
                 Vous devez être connecté pour voir les courts.
