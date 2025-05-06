@@ -45,7 +45,7 @@ const ClientLayout: React.FC = () => {
           <div className="flex items-center">
             <Racket className="h-8 w-8 text-[var(--primary)]" />
             <h1 className="ml-2 text-xl font-bold text-[var(--primary)]">
-              PadelBooking
+              Padel Society
             </h1>
           </div>
           <div className="flex items-center space-x-4">
@@ -104,7 +104,7 @@ const ClientLayout: React.FC = () => {
       <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} PadelBooking. All rights reserved.
+            &copy; {new Date().getFullYear()} Padel Society — All rights reserved.
           </p>
         </div>
       </footer>

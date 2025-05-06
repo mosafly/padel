@@ -1,4 +1,4 @@
-# Padelsociety.ci
+# Padel Society
 
 An application for booking padel courts, featuring seamless integration with the lomi. payment stack.
 
