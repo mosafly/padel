@@ -143,7 +143,7 @@ ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can read their own profile"
   ON public.profiles FOR SELECT TO authenticated USING (auth.uid() = id);
 CREATE POLICY "Admins can read all profiles"
-  ON public.profiles FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin'));
+  ON public.profiles FOR SELECT TO authenticated USING (public.is_current_user_admin());
 CREATE POLICY "Users can insert their own profile"
   ON public.profiles FOR INSERT TO authenticated WITH CHECK (auth.uid() = id AND role = 'client');
   
@@ -151,15 +151,15 @@ CREATE POLICY "Users can insert their own profile"
 CREATE POLICY "Anyone can read courts"
   ON public.courts FOR SELECT TO authenticated USING (true); -- Or `TO anon, authenticated` if public read desired
 CREATE POLICY "Admins can insert courts"
-  ON public.courts FOR INSERT TO authenticated WITH CHECK (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.courts FOR INSERT TO authenticated WITH CHECK (public.is_current_user_admin());
 CREATE POLICY "Admins can update courts"
-  ON public.courts FOR UPDATE TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.courts FOR UPDATE TO authenticated USING (public.is_current_user_admin());
 CREATE POLICY "Admins can delete courts"
-  ON public.courts FOR DELETE TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.courts FOR DELETE TO authenticated USING (public.is_current_user_admin());
 
 -- POLICIES for RESERVATIONS table
 CREATE POLICY "Admins can read all reservations"
-  ON public.reservations FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.reservations FOR SELECT TO authenticated USING (public.is_current_user_admin());
 CREATE POLICY "Users can read their own reservations"
   ON public.reservations FOR SELECT TO authenticated USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert reservations for themselves"
@@ -167,20 +167,23 @@ CREATE POLICY "Users can insert reservations for themselves"
 CREATE POLICY "Users can update their own pending reservations"
   ON public.reservations FOR UPDATE TO authenticated USING (auth.uid() = user_id AND status = 'pending');
 CREATE POLICY "Admins can update any reservation"
-  ON public.reservations FOR UPDATE TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.reservations FOR UPDATE TO authenticated USING (public.is_current_user_admin());
 
 -- POLICIES for PAYMENTS table
 CREATE POLICY "Users can view their own payments"
   ON public.payments FOR SELECT TO authenticated USING (user_id = auth.uid());
 CREATE POLICY "Admins can view all payments"
-  ON public.payments FOR SELECT TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.payments FOR SELECT TO authenticated USING (public.is_current_user_admin());
 CREATE POLICY "Users can create their own payments"
   ON public.payments FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
 CREATE POLICY "Admins can update all payments"
-  ON public.payments FOR UPDATE TO authenticated USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+  ON public.payments FOR UPDATE TO authenticated USING (public.is_current_user_admin());
 
 -- GRANTS (Example for courts, adjust as needed)
 GRANT SELECT ON public.courts TO authenticated;
 GRANT SELECT ON public.courts TO anon; -- If courts should be publicly readable
 
-RAISE NOTICE 'Consolidated initial schema migration complete.'; 
+DO $$
+BEGIN
+  RAISE NOTICE 'Consolidated initial schema migration complete.';
+END $$; 
