@@ -1,6 +1,7 @@
 import { Component, ErrorInfo, ReactNode } from "react";
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-interface Props {
+interface Props extends WithTranslation {
   children: ReactNode;
   fallback?: ReactNode;
 }
@@ -25,6 +26,8 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   render(): ReactNode {
+    const { t } = this.props;
+
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
@@ -32,13 +35,12 @@ class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+          <div className="bg-white p-6 rounded-sm shadow-md max-w-md w-full">
             <h2 className="text-xl font-bold text-red-600 mb-4">
-              Something went wrong
+              {t('errorBoundary.title')}
             </h2>
             <p className="text-gray-700 mb-4">
-              We encountered an unexpected error. Please try refreshing the
-              page.
+              {t('errorBoundary.message')}
             </p>
             <pre className="bg-gray-100 p-2 rounded text-sm overflow-auto mb-4">
               {this.state.error?.message}
@@ -47,7 +49,7 @@ class ErrorBoundary extends Component<Props, State> {
               onClick={() => window.location.reload()}
               className="btn btn-primary w-full"
             >
-              Refresh Page
+              {t('errorBoundary.refreshButton')}
             </button>
           </div>
         </div>
@@ -58,4 +60,4 @@ class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-export default ErrorBoundary;
+export default withTranslation()(ErrorBoundary);

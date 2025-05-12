@@ -3,18 +3,22 @@ import { useParams, useNavigate } from "react-router-dom";
 import { addDays, format, startOfDay } from "date-fns";
 import { useSupabase } from "@/lib/contexts/Supabase";
 import { useAuth } from "@/lib/contexts/Auth";
-import { Court } from "@/components/booking/CourtCard";
-import TimeSlotPicker from "@/components/booking/TimeSlotPicker";
+import { Court } from "@/components/booking/court-card";
+import TimeSlotPicker from "@/components/booking/time-slot-picker";
 import { Calendar, Clock, DollarSign } from "lucide-react";
 import toast from "react-hot-toast";
-import PaymentMethodSelector from "@/components/booking/PaymentMethodSelector";
+import PaymentMethodSelector from "@/components/booking/payment-method-selector";
 import LomiClient from "@/utils/lomi./client";
+import { Spinner } from "@/components/dashboard/spinner";
+import { useTranslation } from "react-i18next";
+import { formatPrice } from "@/lib/actions/helpers";
 
 const ReservationPage: React.FC = () => {
   const { courtId } = useParams();
   const navigate = useNavigate();
   const { supabase } = useSupabase();
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
 
   // Déboguer la clé API lomi.
   console.log(
@@ -57,7 +61,7 @@ const ReservationPage: React.FC = () => {
         setCourt(data);
       } catch (error) {
         console.error("Error fetching court:", error);
-        toast.error("Failed to load court details");
+        toast.error(t("reservationPage.errorLoadingCourt"));
         navigate("/");
       } finally {
         setIsLoading(false);
@@ -65,7 +69,7 @@ const ReservationPage: React.FC = () => {
     };
 
     fetchCourt();
-  }, [courtId, supabase, navigate]);
+  }, [courtId, supabase, navigate, t]);
 
   // Fetch available slots for selected date
   useEffect(() => {
@@ -96,12 +100,12 @@ const ReservationPage: React.FC = () => {
         setAvailableSlots(allSlots);
       } catch (error) {
         console.error("Error fetching available slots:", error);
-        toast.error("Failed to load available time slots");
+        toast.error(t("reservationPage.errorLoadingSlots"));
       }
     };
 
     fetchAvailableSlots();
-  }, [courtId, selectedDate, supabase]);
+  }, [courtId, selectedDate, supabase, t]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(e.target.value);
@@ -117,7 +121,7 @@ const ReservationPage: React.FC = () => {
 
   const handleCashReservation = async () => {
     if (!court || !selectedStartTime || !selectedEndTime || !user) {
-      toast.error("Please select a valid time slot");
+      toast.error(t("reservationPage.errorInvalidSlot"));
       return;
     }
 
@@ -165,16 +169,16 @@ const ReservationPage: React.FC = () => {
 
       if (paymentError) {
         console.error("Error creating payment record:", paymentError);
-        toast.error("Erreur lors de l'enregistrement du paiement");
+        toast.error(t("reservationPage.errorSavingPayment"));
       } else {
         console.log("Payment record created:", paymentData);
       }
 
-      toast.success("Reservation created successfully!");
+      toast.success(t("reservationPage.reservationSuccess"));
       navigate("/my-reservations");
     } catch (error) {
       console.error("Error creating reservation:", error);
-      toast.error("Failed to create reservation");
+      toast.error(t("reservationPage.reservationError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -182,7 +186,7 @@ const ReservationPage: React.FC = () => {
 
   const handleOnlinePayment = async () => {
     if (!court || !selectedStartTime || !selectedEndTime || !user) {
-      toast.error("Choisissez un créneau valide");
+      toast.error(t("reservationPage.errorInvalidSlotOnline"));
       return;
     }
     setIsSubmitting(true);
@@ -261,7 +265,7 @@ const ReservationPage: React.FC = () => {
 
       if (paymentError) {
         console.error("Error creating payment record:", paymentError);
-        toast.error("Erreur lors de l'enregistrement du paiement");
+        toast.error(t("reservationPage.errorSavingPayment"));
       } else {
         console.log("Payment record created:", paymentData);
       }
@@ -290,7 +294,7 @@ const ReservationPage: React.FC = () => {
           Object.getOwnPropertyNames(originalError || {}),
         ),
       });
-      toast.error(`Paiement en ligne échoué: ${errMessage}`);
+      toast.error(t("reservationPage.onlinePaymentFailed", { message: errMessage }));
     } finally {
       setIsSubmitting(false);
     }
@@ -299,16 +303,14 @@ const ReservationPage: React.FC = () => {
   const hours =
     selectedStartTime && selectedEndTime
       ? (selectedEndTime.getTime() - selectedStartTime.getTime()) /
-        (1000 * 60 * 60)
+      (1000 * 60 * 60)
       : 0;
   const totalPrice = court ? court.price_per_hour * hours : 0;
 
   if (isLoading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-pulse text-gray-500">
-          Loading court details...
-        </div>
+        <Spinner />
       </div>
     );
   }
@@ -316,9 +318,9 @@ const ReservationPage: React.FC = () => {
   if (!court) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Court not found.</p>
+        <p className="text-gray-500">{t("reservationPage.courtNotFound")}</p>
         <button onClick={() => navigate("/")} className="mt-4 btn btn-primary">
-          Back to Courts
+          {t("reservationPage.backToCourtsButton")}
         </button>
       </div>
     );
@@ -331,11 +333,11 @@ const ReservationPage: React.FC = () => {
           onClick={() => navigate("/")}
           className="text-[var(--primary)] hover:text-[var(--primary-dark)] font-medium flex items-center"
         >
-          ← Back to Courts
+          ← {t("reservationPage.backToCourtsLink")}
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+      <div className="bg-white rounded-sm shadow-sm overflow-hidden mb-6">
         <div className="md:flex">
           <div className="md:w-1/3">
             <img
@@ -354,23 +356,24 @@ const ReservationPage: React.FC = () => {
             <div className="mt-4 flex items-center text-gray-700">
               <DollarSign size={20} className="mr-1" />
               <span className="text-lg font-medium">
-                ${court.price_per_hour.toFixed(2)}/hour
+                {formatPrice(court.price_per_hour, t("localeCode"), i18n.language === 'fr' ? 'XOF' : 'USD')}
+                {' '}{t("courtCard.pricePerHourSuffix")}
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white rounded-sm shadow-sm p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">
-          {isSubmitting ? "Processing Reservation..." : "Make a Reservation"}
+          {isSubmitting ? t("reservationPage.titleProcessing") : t("reservationPage.titleMakeReservation")}
         </h2>
 
         <div>
           <div className="form-group">
             <label htmlFor="date" className="form-label flex items-center">
               <Calendar size={16} className="mr-1" />
-              Select Date
+              {t("reservationPage.selectDateLabel")}
             </label>
             <input
               type="date"
@@ -392,9 +395,9 @@ const ReservationPage: React.FC = () => {
           />
 
           {selectedStartTime && selectedEndTime && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-6 p-4 bg-gray-50 rounded-sm">
               <h3 className="font-semibold text-gray-900">
-                Reservation Summary
+                {t("reservationPage.summaryTitle")}
               </h3>
               <div className="mt-2 space-y-2">
                 <div className="flex items-center text-sm text-gray-700">
@@ -410,7 +413,7 @@ const ReservationPage: React.FC = () => {
                 </div>
                 <div className="flex items-center text-sm text-gray-700">
                   <DollarSign size={16} className="mr-2" />
-                  <span>Total: ${totalPrice.toFixed(2)}</span>
+                  <span>{t("reservationPage.summaryTotalLabel")} {formatPrice(totalPrice, t("localeCode"), i18n.language === 'fr' ? 'XOF' : 'USD')}</span>
                 </div>
               </div>
             </div>

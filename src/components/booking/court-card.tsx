@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Tag } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 export type Court = {
   id: string;
@@ -17,6 +18,7 @@ interface CourtCardProps {
 
 const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleBookNow = () => {
     navigate(`/reservation/${court.id}`);
@@ -25,18 +27,18 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
   const getStatusBadge = () => {
     switch (court.status) {
       case "available":
-        return <span className="badge badge-success">Available</span>;
+        return <span className="badge badge-success">{t('courtCard.statusAvailable')}</span>;
       case "reserved":
-        return <span className="badge badge-accent">Reserved</span>;
+        return <span className="badge badge-accent">{t('courtCard.statusReserved')}</span>;
       case "maintenance":
-        return <span className="badge badge-danger">Maintenance</span>;
+        return <span className="badge badge-danger">{t('courtCard.statusMaintenance')}</span>;
       default:
         return null;
     }
   };
 
   // Handle null case for description
-  const description = court.description || "No description available";
+  const description = court.description || t('courtCard.noDescription');
 
   return (
     <div className="card animate-fade-in">
@@ -58,7 +60,9 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
         <div className="mt-3 flex items-center justify-between">
           <div className="flex items-center text-sm text-gray-700">
             <Tag size={16} className="mr-1" />
-            <span>${court.price_per_hour.toFixed(2)}/hour</span>
+            <span>
+              {new Intl.NumberFormat('fr-CI', { style: 'currency', currency: 'XOF', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(court.price_per_hour)} {t('courtCard.pricePerHourSuffix')}
+            </span>
           </div>
         </div>
 
@@ -66,13 +70,12 @@ const CourtCard: React.FC<CourtCardProps> = ({ court }) => {
           <button
             onClick={handleBookNow}
             disabled={court.status !== "available"}
-            className={`w-full btn ${
-              court.status === "available"
-                ? "btn-primary"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
+            className={`w-full btn ${court.status === "available"
+              ? "btn-primary"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
           >
-            {court.status === "available" ? "Book Now" : "Unavailable"}
+            {court.status === "available" ? t('courtCard.bookNow') : t('courtCard.unavailable')}
           </button>
         </div>
       </div>

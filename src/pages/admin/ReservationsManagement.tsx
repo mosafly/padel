@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSupabase } from "@/lib/contexts/Supabase";
-import ReservationList from "@/components/booking/ReservationList";
+import ReservationList from "@/components/booking/reservation-list";
 import { Calendar, Filter } from "lucide-react";
 import { addDays, format, subDays } from "date-fns";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/dashboard/spinner";
 
 interface AdminReservation {
   id: string;
@@ -153,7 +154,7 @@ const ReservationsManagement: React.FC = () => {
         <p className="text-gray-600">View and manage all court reservations</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-white rounded-sm shadow-sm p-6">
         <div className="flex flex-col md:flex-row md:items-end space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1">
             <label
@@ -216,12 +217,10 @@ const ReservationsManagement: React.FC = () => {
 
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-pulse text-gray-500">
-            Loading reservations...
-          </div>
+          <Spinner />
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-sm shadow-sm p-6">
           <h2 className="text-lg font-bold mb-4">Reservation List</h2>
           <ReservationList
             reservations={reservations}

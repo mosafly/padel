@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/contexts/Auth";
 import toast from "react-hot-toast";
+import { Spinner } from '@/components/dashboard/spinner';
 
 const AdminLayout: React.FC = () => {
   const { signOut, user, userRole, isLoading } = useAuth();
@@ -43,13 +44,11 @@ const AdminLayout: React.FC = () => {
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  // Show a mini loading indicator if auth state is still loading
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--primary)]"></div>
-          <p className="mt-2">Loading admin dashboard...</p>
+          <Spinner />
         </div>
       </div>
     );
@@ -63,10 +62,9 @@ const AdminLayout: React.FC = () => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center px-4 py-3 text-sm font-medium rounded-lg ${
-          isActive
-            ? "bg-[var(--primary)] text-white"
-            : "text-gray-700 hover:bg-gray-100"
+        `flex items-center px-4 py-3 text-sm font-medium rounded-sm ${isActive
+          ? "bg-[var(--primary)] text-white"
+          : "text-gray-700 hover:bg-gray-100"
         }`
       }
       onClick={() => setSidebarOpen(false)}
@@ -88,9 +86,8 @@ const AdminLayout: React.FC = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out`}
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out`}
       >
         <div className="h-full flex flex-col">
           <div className="flex items-center justify-between px-4 h-16 border-b border-gray-200">

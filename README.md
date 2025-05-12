@@ -63,5 +63,12 @@ To start the development server:
 ```bash
 pnpm run dev
 ```
+then to run the app:
+
+```bash
+supabase login
+supabase link
+supabase db push
+```
 
 The application should now be running on your local development server (usually `http://localhost:5173` or similar).

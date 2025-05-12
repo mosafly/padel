@@ -8,7 +8,8 @@ import {
 import { Toaster } from "react-hot-toast";
 import { SupabaseProvider } from "./lib/contexts/Supabase";
 import { AuthProvider, useAuth } from "./lib/contexts/Auth";
-import ErrorBoundary from "./components/booking/ErrorBoundary";
+import ErrorBoundary from "./components/booking/error-boundary";
+import { Spinner } from './components/dashboard/spinner';
 
 // Layouts
 import ClientLayout from "./lib/layouts/ClientLayout";
@@ -44,8 +45,7 @@ const ProtectedRoute = ({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--primary)]"></div>
-          <p className="mt-2">Loading...</p>
+          <Spinner />
         </div>
       </div>
     );
@@ -65,8 +65,7 @@ const ProtectedRoute = ({
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--primary)]"></div>
-          <p className="mt-2">Chargement des permissions...</p>
+          <Spinner />
         </div>
       </div>
     );

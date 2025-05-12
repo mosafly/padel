@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 export type CourtFormData = {
   name: string;
@@ -28,6 +29,7 @@ const CourtForm: React.FC<CourtFormProps> = ({
   isSubmitting,
 }) => {
   const [formData, setFormData] = useState<CourtFormData>(initialData);
+  const { t } = useTranslation();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -51,7 +53,7 @@ const CourtForm: React.FC<CourtFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="form-group">
         <label htmlFor="name" className="form-label">
-          Court Name
+          {t('courtForm.nameLabel')}
         </label>
         <input
           type="text"
@@ -66,7 +68,7 @@ const CourtForm: React.FC<CourtFormProps> = ({
 
       <div className="form-group">
         <label htmlFor="description" className="form-label">
-          Description
+          {t('courtForm.descriptionLabel')}
         </label>
         <textarea
           id="description"
@@ -81,14 +83,14 @@ const CourtForm: React.FC<CourtFormProps> = ({
 
       <div className="form-group">
         <label htmlFor="price_per_hour" className="form-label">
-          Price per Hour ($)
+          {t('courtForm.priceLabel')}
         </label>
         <input
           type="number"
           id="price_per_hour"
           name="price_per_hour"
           min="0"
-          step="0.01"
+          step="1"
           value={formData.price_per_hour}
           onChange={handleChange}
           className="form-input"
@@ -98,7 +100,7 @@ const CourtForm: React.FC<CourtFormProps> = ({
 
       <div className="form-group">
         <label htmlFor="image_url" className="form-label">
-          Image URL
+          {t('courtForm.imageUrlLabel')}
         </label>
         <input
           type="url"
@@ -107,13 +109,13 @@ const CourtForm: React.FC<CourtFormProps> = ({
           value={formData.image_url}
           onChange={handleChange}
           className="form-input"
-          placeholder="https://example.com/image.jpg"
+          placeholder={t('courtForm.imageUrlPlaceholder')}
         />
       </div>
 
       <div className="form-group">
         <label htmlFor="status" className="form-label">
-          Status
+          {t('courtForm.statusLabel')}
         </label>
         <select
           id="status"
@@ -123,9 +125,9 @@ const CourtForm: React.FC<CourtFormProps> = ({
           className="form-input"
           required
         >
-          <option value="available">Available</option>
-          <option value="reserved">Reserved</option>
-          <option value="maintenance">Maintenance</option>
+          <option value="available">{t('courtForm.statusAvailable')}</option>
+          <option value="reserved">{t('courtForm.statusReserved')}</option>
+          <option value="maintenance">{t('courtForm.statusMaintenance')}</option>
         </select>
       </div>
 
@@ -135,7 +137,7 @@ const CourtForm: React.FC<CourtFormProps> = ({
           disabled={isSubmitting}
           className="btn btn-primary"
         >
-          {isSubmitting ? "Saving..." : "Save Court"}
+          {isSubmitting ? t('courtForm.savingButton') : t('courtForm.saveButton')}
         </button>
       </div>
     </form>

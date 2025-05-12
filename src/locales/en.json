@@ -1,0 +1,117 @@
+{
+  "brand": "Padel Society",
+  "loadingAccount": "Loading your account...",
+  "courts": "Courts",
+  "myReservations": "My reservations",
+  "signOut": "Sign out",
+  "footer": {
+    "copyright": "Padel Society S.A.R.L. — All rights reserved.",
+    "english": "English",
+    "french": "Français"
+  },
+  "courtCard": {
+    "statusAvailable": "Available",
+    "statusReserved": "Reserved",
+    "statusMaintenance": "Maintenance",
+    "noDescription": "No description available",
+    "pricePerHourSuffix": "/ hour",
+    "bookNow": "Book Now",
+    "unavailable": "Unavailable"
+  },
+  "courtForm": {
+    "nameLabel": "Court name",
+    "descriptionLabel": "Description",
+    "priceLabel": "Price per Hour (XOF)",
+    "imageUrlLabel": "Image URL",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "statusLabel": "Status",
+    "statusAvailable": "Available",
+    "statusReserved": "Reserved",
+    "statusMaintenance": "Maintenance",
+    "savingButton": "Saving...",
+    "saveButton": "Save court"
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "message": "We encountered an unexpected error. Please try refreshing the page.",
+    "refreshButton": "Refresh"
+  },
+  "paymentMethodSelector": {
+    "title": "Select payment method",
+    "payOnline": "Pay online",
+    "payOnSpot": "Pay on spot",
+    "processing": "Processing payment..."
+  },
+  "reservationList": {
+    "statusConfirmed": "Confirmed",
+    "statusPending": "Pending",
+    "statusCancelled": "Cancelled",
+    "noReservations": "No reservations found.",
+    "userPrefix": "User:",
+    "confirmButton": "Confirm",
+    "cancelButton": "Cancel"
+  },
+  "timeSlotPicker": {
+    "title": "Available time slots"
+  },
+  "myReservationsPage": {
+    "title": "My reservations",
+    "subtitle": "View and manage your upcoming and past reservations",
+    "errorLoading": "Failed to load reservations",
+    "cancelSuccess": "Reservation cancelled successfully",
+    "cancelError": "Failed to cancel reservation"
+  },
+  "paymentSimulationPage": {
+    "title": "Payment simulation",
+    "missingReservationId": "Missing reservation ID",
+    "errorFetchingPaymentConsole": "Error retrieving payment:",
+    "errorFetchingPaymentInfo": "Error retrieving payment information",
+    "errorUpdatingPaymentConsole": "Error updating payment:",
+    "errorUpdatingPaymentToast": "Error updating payment",
+    "paymentSuccessToast": "Payment successful!",
+    "paymentFailedToast": "Payment failed",
+    "errorProcessingPaymentConsole": "Error processing payment:",
+    "errorProcessingPaymentToast": "An error occurred while processing the payment",
+    "amountLabel": "Amount:",
+    "reservationIdLabel": "Reservation ID:",
+    "statusLabel": "Status:",
+    "paymentSuccessStatus": "Payment successful",
+    "paymentFailedStatus": "Payment failed",
+    "returnButton": "Return to Home"
+  },
+  "reservationPage": {
+    "localeCode": "en-US",
+    "errorLoadingCourt": "Failed to load court details",
+    "errorLoadingSlots": "Failed to load available time slots",
+    "errorInvalidSlot": "Please select a valid time slot",
+    "errorSavingPayment": "Error saving payment record",
+    "reservationSuccess": "Reservation created successfully!",
+    "reservationError": "Failed to create reservation",
+    "errorInvalidSlotOnline": "Please select a valid time slot",
+    "onlinePaymentFailed": "Online payment failed: {{message}}",
+    "courtNotFound": "Court not found.",
+    "backToCourtsButton": "Back to courts",
+    "backToCourtsLink": "Back to courts",
+    "titleProcessing": "Processing reservation...",
+    "titleMakeReservation": "Make a reservation",
+    "selectDateLabel": "Select date",
+    "summaryTitle": "Summary",
+    "summaryTotalLabel": "Total:"
+  },
+  "homePage": {
+    "errorLoadingGeneric": "Failed to load courts. Please check connection or try again later.",
+    "errorLoadingToast": "Failed to load courts",
+    "errorLoadingRefresh": "Failed to load courts. Please try refreshing the page.",
+    "title": "Find your court",
+    "subtitle": "Book your preferred padel court easily",
+    "searchPlaceholder": "Search courts...",
+    "refreshButtonTitle": "Refresh courts",
+    "errorAuthMessage": "You must be logged in to view courts.",
+    "loginButton": "Log In",
+    "retryButton": "Retry",
+    "refreshPageButton": "Refresh",
+    "noCourtsFoundSearch": "No courts found with your search criteria.",
+    "noCourtsAvailable": "No courts available at the moment.",
+    "refreshCourtsButton": "Refresh courts"
+  }
+} 

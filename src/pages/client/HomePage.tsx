@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSupabase } from "@/lib/contexts/Supabase";
-import CourtCard, { Court } from "@/components/booking/CourtCard";
+import CourtCard, { Court } from "@/components/booking/court-card";
 import { Search, RefreshCw } from "lucide-react";
 import toast from "react-hot-toast";
+import { Spinner } from '@/components/dashboard/spinner';
+import { useTranslation } from "react-i18next";
 
 const HomePage: React.FC = () => {
   const { supabase } = useSupabase();
+  const { t } = useTranslation();
   const [courts, setCourts] = useState<Court[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [retryCount, setRetryCount] = useState(0);
 
   const fetchCourts = useCallback(async () => {
     try {
@@ -26,22 +28,22 @@ const HomePage: React.FC = () => {
 
       if (error) {
         console.error("Supabase error fetching courts:", error);
-        setError(`Failed to load courts: ${error.message}`);
-        toast.error("Failed to load courts");
+        setError(t("homePage.errorLoadingGeneric"));
+        toast.error(t("homePage.errorLoadingToast"));
       } else {
         console.log("Courts data received:", data?.length || 0, "courts");
         setCourts(data || []);
       }
     } catch (error) {
       console.error("Exception while fetching courts:", error);
-      setError("Failed to load courts. Please try refreshing the page.");
+      setError(t("homePage.errorLoadingRefresh"));
     } finally {
       setIsLoading(false);
     }
-  }, [supabase]);
+  }, [supabase, t]);
 
   const handleRefresh = () => {
-    setRetryCount((prev) => prev + 1);
+    fetchCourts();
   };
 
   useEffect(() => {
@@ -83,19 +85,19 @@ const HomePage: React.FC = () => {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Find Your Court
+          {t("homePage.title")}
         </h1>
-        <p className="text-gray-600">Book your preferred padel court easily</p>
+        <p className="text-gray-600">{t("homePage.subtitle")}</p>
       </div>
 
       <div className="flex justify-between items-center mb-6">
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 max-w-sm">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-gray-400" />
           </div>
           <input
             type="text"
-            placeholder="Search courts..."
+            placeholder={t("homePage.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="form-input pl-10 w-full"
@@ -104,8 +106,8 @@ const HomePage: React.FC = () => {
 
         <button
           onClick={handleRefresh}
-          className="ml-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
-          title="Refresh courts"
+          className="ml-4 p-2 rounded-sm hover:bg-gray-100 transition-colors"
+          title={t("homePage.refreshButtonTitle")}
           disabled={isLoading}
         >
           <RefreshCw
@@ -117,54 +119,46 @@ const HomePage: React.FC = () => {
       {isLoading ? (
         <div className="flex justify-center py-12">
           <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--primary)]"></div>
-            <p className="mt-3 text-gray-600">Loading courts...</p>
-            <p className="text-xs text-gray-500 mt-1">
-              {retryCount > 0
-                ? `Retry attempt ${retryCount}`
-                : "Connecting to database..."}
-            </p>
+            <Spinner />
           </div>
         </div>
       ) : error ? (
         <div
-          className="text-center py-12 bg-white rounded-lg shadow-sm p-6"
+          className="text-center py-12 bg-white rounded-sm shadow-sm p-6"
           data-component-name="HomePage"
         >
           <p className="text-red-500 mb-4">{error}</p>
-          {error.includes("auth") ||
-          error.includes("credentials") ||
-          error.includes("session") ? (
+          {error && (error.includes("auth") || error.includes("credentials") || error.includes("session") || error.includes(t("homePage.errorLoadingGeneric"))) ? (
             <div>
               <p className="text-gray-600 mb-4">
-                Vous devez être connecté pour voir les courts.
+                {t("homePage.errorAuthMessage")}
               </p>
               <button
                 onClick={() => (window.location.href = "/login")}
                 className="btn btn-primary mr-3"
               >
-                Se connecter
+                {t("homePage.loginButton")}
               </button>
               <button onClick={handleRefresh} className="btn btn-outline mt-2">
-                Réessayer
+                {t("homePage.retryButton")}
               </button>
             </div>
           ) : (
             <button onClick={handleRefresh} className="btn btn-primary">
-              Refresh Page
+              {t("homePage.refreshPageButton")}
             </button>
           )}
         </div>
       ) : filteredCourts.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg shadow-sm">
+        <div className="text-center py-12 bg-white rounded-sm shadow-sm">
           <p className="text-gray-500">
             {searchQuery
-              ? "No courts found with your search criteria."
-              : "No courts available at the moment."}
+              ? t("homePage.noCourtsFoundSearch")
+              : t("homePage.noCourtsAvailable")}
           </p>
           {!searchQuery && courts.length === 0 && (
             <button onClick={handleRefresh} className="btn btn-primary mt-4">
-              Refresh Courts
+              {t("homePage.refreshCourtsButton")}
             </button>
           )}
         </div>

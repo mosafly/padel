@@ -1,6 +1,8 @@
 import React from "react";
 import { format } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import { Calendar, Clock, DollarSign } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 export type Reservation = {
   id: string;
@@ -28,22 +30,35 @@ const ReservationList: React.FC<ReservationListProps> = ({
   isAdmin,
   onConfirm,
 }) => {
+  const { t, i18n } = useTranslation();
+
+  const currentLocale = i18n.language === 'fr' ? fr : enUS;
+
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "MMM dd, yyyy");
+    return format(new Date(dateString), "P", { locale: currentLocale });
   };
 
   const formatTime = (dateString: string) => {
-    return format(new Date(dateString), "h:mm a");
+    return format(new Date(dateString), "p", { locale: currentLocale });
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('fr-CI', {
+      style: 'currency',
+      currency: 'XOF',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "confirmed":
-        return <span className="badge badge-success">Confirmed</span>;
+        return <span className="badge badge-success">{t('reservationList.statusConfirmed')}</span>;
       case "pending":
-        return <span className="badge badge-warning">Pending</span>;
+        return <span className="badge badge-warning">{t('reservationList.statusPending')}</span>;
       case "cancelled":
-        return <span className="badge badge-danger">Cancelled</span>;
+        return <span className="badge badge-danger">{t('reservationList.statusCancelled')}</span>;
       default:
         return null;
     }
@@ -52,14 +67,14 @@ const ReservationList: React.FC<ReservationListProps> = ({
   return (
     <div className="space-y-4">
       {reservations.length === 0 ? (
-        <div className="text-center py-6 bg-white rounded-lg shadow-sm">
-          <p className="text-gray-500">No reservations found.</p>
+        <div className="text-center py-6 bg-white rounded-sm shadow-sm">
+          <p className="text-gray-500">{t('reservationList.noReservations')}</p>
         </div>
       ) : (
         reservations.map((reservation) => (
           <div
             key={reservation.id}
-            className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+            className="bg-white rounded-sm shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
           >
             <div className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between">
@@ -69,7 +84,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   </h3>
                   {isAdmin && reservation.user_email && (
                     <div className="mt-1 text-sm text-gray-700">
-                      User: {reservation.user_email}
+                      {t('reservationList.userPrefix')} {reservation.user_email}
                     </div>
                   )}
                   <div className="mt-1 flex items-center text-sm text-gray-700">
@@ -85,7 +100,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                   </div>
                   <div className="mt-1 flex items-center text-sm text-gray-700">
                     <DollarSign size={16} className="mr-1" />
-                    <span>${reservation.total_price.toFixed(2)}</span>
+                    <span>{formatCurrency(reservation.total_price)}</span>
                   </div>
                 </div>
 
@@ -102,7 +117,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                           onClick={() => onConfirm(reservation.id)}
                           className="btn btn-secondary text-xs px-3 py-1"
                         >
-                          Confirm
+                          {t('reservationList.confirmButton')}
                         </button>
                       )}
 
@@ -113,7 +128,7 @@ const ReservationList: React.FC<ReservationListProps> = ({
                           onClick={() => onCancel(reservation.id)}
                           className="btn btn-danger text-xs px-3 py-1"
                         >
-                          Cancel
+                          {t('reservationList.cancelButton')}
                         </button>
                       )}
                   </div>

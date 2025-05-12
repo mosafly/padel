@@ -1,5 +1,7 @@
 import React from "react";
 import { format, isBefore, isSameDay } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
+import { useTranslation } from 'react-i18next';
 
 interface TimeSlotPickerProps {
   date: Date;
@@ -17,6 +19,9 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   selectedStartTime,
   onSelectTimeSlot,
 }) => {
+  const { t, i18n } = useTranslation();
+  const currentLocale = i18n.language === 'fr' ? fr : enUS;
+
   // Generate time slots for the day (1-hour slots from 8am to 10pm)
   const generateTimeSlots = () => {
     const slots = [];
@@ -57,12 +62,12 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
 
   return (
     <div className="mt-4">
-      <h3 className="text-lg font-semibold mb-3">Available Time Slots</h3>
+      <h3 className="text-lg font-semibold mb-3">{t('timeSlotPicker.title')}</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         {timeSlots.map((slot, index) => {
           const isSelected = selectedStartTime
             ? format(selectedStartTime, "HH:mm") ===
-              format(slot.startTime, "HH:mm")
+            format(slot.startTime, "HH:mm")
             : false;
 
           return (
@@ -74,17 +79,16 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
               }
               disabled={!slot.isAvailable}
               className={`
-                px-3 py-2 rounded-md text-center text-sm transition-colors
-                ${
-                  isSelected
-                    ? "bg-[var(--primary)] text-white"
-                    : slot.isAvailable
-                      ? "bg-white border border-gray-300 text-gray-700 hover:border-[var(--primary)] hover:text-[var(--primary)]"
-                      : "bg-gray-100 border border-gray-200 text-gray-400 cursor-not-allowed"
+                px-3 py-2 rounded-sm text-center text-sm transition-colors
+                ${isSelected
+                  ? "bg-[var(--primary)] text-white"
+                  : slot.isAvailable
+                    ? "bg-white border border-gray-300 text-gray-700 hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                    : "bg-gray-100 border border-gray-200 text-gray-400 cursor-not-allowed"
                 }
               `}
             >
-              {format(slot.startTime, "h:mm a")}
+              {format(slot.startTime, "p", { locale: currentLocale })}
             </button>
           );
         })}

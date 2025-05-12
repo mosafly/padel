@@ -3,11 +3,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSupabase } from "@/lib/contexts/Supabase";
+import { Spinner } from '@/components/dashboard/spinner';
+import { useTranslation } from "react-i18next";
 
 const PaymentSimulationPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { supabase } = useSupabase();
+  const { t } = useTranslation();
   const [status, setStatus] = useState<"processing" | "success" | "failed">(
     "processing",
   );
@@ -18,7 +21,7 @@ const PaymentSimulationPage: React.FC = () => {
   useEffect(() => {
     const processPayment = async () => {
       if (!reservationId) {
-        toast.error("ID de réservation manquant");
+        toast.error(t("paymentSimulationPage.missingReservationId"));
         setStatus("failed");
         return;
       }
@@ -40,11 +43,11 @@ const PaymentSimulationPage: React.FC = () => {
 
         if (paymentFetchError) {
           console.error(
-            "Erreur lors de la récupération du paiement:",
+            t("paymentSimulationPage.errorFetchingPaymentConsole"),
             paymentFetchError,
           );
           toast.error(
-            "Erreur lors de la récupération des informations de paiement",
+            t("paymentSimulationPage.errorFetchingPaymentInfo"),
           );
           setStatus("failed");
           return;
@@ -61,10 +64,10 @@ const PaymentSimulationPage: React.FC = () => {
 
         if (updateError) {
           console.error(
-            "Erreur lors de la mise à jour du paiement:",
+            t("paymentSimulationPage.errorUpdatingPaymentConsole"),
             updateError,
           );
-          toast.error("Erreur lors de la mise à jour du paiement");
+          toast.error(t("paymentSimulationPage.errorUpdatingPaymentToast"));
           setStatus("failed");
           return;
         }
@@ -72,32 +75,32 @@ const PaymentSimulationPage: React.FC = () => {
         setStatus(success ? "success" : "failed");
 
         if (success) {
-          toast.success("Paiement réussi !");
+          toast.success(t("paymentSimulationPage.paymentSuccessToast"));
         } else {
-          toast.error("Échec du paiement");
+          toast.error(t("paymentSimulationPage.paymentFailedToast"));
         }
       } catch (error) {
-        console.error("Erreur lors du traitement du paiement:", error);
-        toast.error("Une erreur est survenue lors du traitement du paiement");
+        console.error(t("paymentSimulationPage.errorProcessingPaymentConsole"), error);
+        toast.error(t("paymentSimulationPage.errorProcessingPaymentToast"));
         setStatus("failed");
       }
     };
 
     processPayment();
-  }, [reservationId, supabase]);
+  }, [reservationId, supabase, t]);
 
   const handleReturn = () => {
     navigate("/");
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-sm shadow-md">
       <h1 className="text-2xl font-bold text-center mb-6">
-        Simulation de Paiement
+        {t("paymentSimulationPage.title")}
       </h1>
 
       <div className="mb-6">
-        <p className="text-gray-600 mb-2">Montant:</p>
+        <p className="text-gray-600 mb-2">{t("paymentSimulationPage.amountLabel")}</p>
         <p className="text-xl font-semibold">
           {(parseInt(amount) / 100).toFixed(2)} {currency}
         </p>
@@ -105,7 +108,7 @@ const PaymentSimulationPage: React.FC = () => {
 
       {reservationId && (
         <div className="mb-6">
-          <p className="text-gray-600 mb-2">Réservation ID:</p>
+          <p className="text-gray-600 mb-2">{t("paymentSimulationPage.reservationIdLabel")}</p>
           <p className="text-sm font-mono bg-gray-100 p-2 rounded">
             {reservationId}
           </p>
@@ -113,26 +116,25 @@ const PaymentSimulationPage: React.FC = () => {
       )}
 
       <div className="mb-8">
-        <p className="text-gray-600 mb-4">Statut:</p>
+        <p className="text-gray-600 mb-4">{t("paymentSimulationPage.statusLabel")}</p>
 
         {status === "processing" && (
           <div className="flex items-center">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mr-3"></div>
-            <p>Traitement du paiement...</p>
+            <Spinner />
           </div>
         )}
 
         {status === "success" && (
           <div className="flex items-center text-green-600">
             <Check className="h-6 w-6 mr-3" />
-            <p>Paiement réussi</p>
+            <p>{t("paymentSimulationPage.paymentSuccessStatus")}</p>
           </div>
         )}
 
         {status === "failed" && (
           <div className="flex items-center text-red-600">
             <X className="h-6 w-6 mr-3" />
-            <p>Échec du paiement</p>
+            <p>{t("paymentSimulationPage.paymentFailedStatus")}</p>
           </div>
         )}
       </div>
@@ -140,9 +142,9 @@ const PaymentSimulationPage: React.FC = () => {
       {status !== "processing" && (
         <button
           onClick={handleReturn}
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300"
+          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-sm shadow-md transition duration-300"
         >
-          Retour à l'accueil
+          {t("paymentSimulationPage.returnButton")}
         </button>
       )}
     </div>

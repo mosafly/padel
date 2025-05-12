@@ -3,12 +3,15 @@ import { useSupabase } from "@/lib/contexts/Supabase";
 import { useAuth } from "@/lib/contexts/Auth";
 import ReservationList, {
   Reservation,
-} from "@/components/booking/ReservationList";
+} from "@/components/booking/reservation-list";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/dashboard/spinner";
+import { useTranslation } from "react-i18next";
 
 const MyReservationsPage: React.FC = () => {
   const { supabase } = useSupabase();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,14 +43,14 @@ const MyReservationsPage: React.FC = () => {
         setReservations(transformedData);
       } catch (error) {
         console.error("Error fetching reservations:", error);
-        toast.error("Failed to load reservations");
+        toast.error(t("myReservationsPage.errorLoading"));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchReservations();
-  }, [user, supabase]);
+  }, [user, supabase, t]);
 
   const handleCancelReservation = async (id: string) => {
     try {
@@ -65,10 +68,10 @@ const MyReservationsPage: React.FC = () => {
         ),
       );
 
-      toast.success("Reservation cancelled successfully");
+      toast.success(t("myReservationsPage.cancelSuccess"));
     } catch (error) {
       console.error("Error cancelling reservation:", error);
-      toast.error("Failed to cancel reservation");
+      toast.error(t("myReservationsPage.cancelError"));
     }
   };
 
@@ -76,18 +79,16 @@ const MyReservationsPage: React.FC = () => {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          My Reservations
+          {t("myReservationsPage.title")}
         </h1>
         <p className="text-gray-600">
-          View and manage your upcoming and past reservations
+          {t("myReservationsPage.subtitle")}
         </p>
       </div>
 
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-pulse text-gray-500">
-            Loading reservations...
-          </div>
+          <Spinner />
         </div>
       ) : (
         <ReservationList

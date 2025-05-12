@@ -3,10 +3,14 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { Brackets as Racket, Calendar, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/contexts/Auth";
 import toast from "react-hot-toast";
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/dashboard/language-switcher';
+import { Spinner } from '@/components/dashboard/spinner';
 
 const ClientLayout: React.FC = () => {
   const { signOut, user, isLoading } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Handle any auth-related errors that might occur
@@ -31,8 +35,8 @@ const ClientLayout: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--primary)]"></div>
-          <p className="mt-2">Loading your account...</p>
+          <Spinner />
+          <p className="mt-2">{t('loadingAccount')}</p>
         </div>
       </div>
     );
@@ -45,7 +49,7 @@ const ClientLayout: React.FC = () => {
           <div className="flex items-center">
             <Racket className="h-8 w-8 text-[var(--primary)]" />
             <h1 className="ml-2 text-xl font-bold text-[var(--primary)]">
-              Padel Society
+              {t('brand')}
             </h1>
           </div>
           <div className="flex items-center space-x-4">
@@ -55,7 +59,7 @@ const ClientLayout: React.FC = () => {
             <button
               onClick={handleSignOut}
               className="text-gray-500 hover:text-gray-700"
-              aria-label="Sign out"
+              aria-label={t('signOut')}
             >
               <LogOut size={20} />
             </button>
@@ -70,29 +74,27 @@ const ClientLayout: React.FC = () => {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${
-                    isActive
-                      ? "border-[var(--primary)] text-[var(--primary)]"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${isActive
+                    ? "border-[var(--primary)] text-[var(--primary)]"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`
                 }
               >
                 <Racket size={16} className="mr-1" />
-                Courts
+                {t('courts')}
               </NavLink>
 
               <NavLink
                 to="/my-reservations"
                 className={({ isActive }) =>
-                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${
-                    isActive
-                      ? "border-[var(--primary)] text-[var(--primary)]"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  `flex items-center px-2 py-1 border-b-2 text-sm font-medium ${isActive
+                    ? "border-[var(--primary)] text-[var(--primary)]"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`
                 }
               >
                 <Calendar size={16} className="mr-1" />
-                My Reservations
+                {t('myReservations')}
               </NavLink>
             </div>
           </div>
@@ -104,11 +106,11 @@ const ClientLayout: React.FC = () => {
       </main>
 
       <footer className="bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <p className="text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Padel Society — All rights
-            reserved.
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <p className="text-sm text-gray-500">
+            &copy; {new Date().getFullYear()} {t('footer.copyright')}
           </p>
+          <LanguageSwitcher />
         </div>
       </footer>
     </div>

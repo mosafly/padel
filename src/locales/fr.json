@@ -1,0 +1,117 @@
+{
+  "brand": "Padel Society",
+  "loadingAccount": "Chargement en cours..",
+  "courts": "Terrains",
+  "myReservations": "Mes réservations",
+  "signOut": "Se déconnecter",
+  "footer": {
+    "copyright": "Padel Society S.A.R.L. — Tous droits réservés.",
+    "english": "English",
+    "french": "Français"
+  },
+  "courtCard": {
+    "statusAvailable": "Disponible",
+    "statusReserved": "Réservé",
+    "statusMaintenance": "Maintenance",
+    "noDescription": "Aucune description disponible",
+    "pricePerHourSuffix": "/ heure",
+    "bookNow": "Réserver maintenant",
+    "unavailable": "Indisponible"
+  },
+  "courtForm": {
+    "nameLabel": "Nom du terrain",
+    "descriptionLabel": "Description",
+    "priceLabel": "Prix par heure (XOF)",
+    "imageUrlLabel": "URL de l'image",
+    "imageUrlPlaceholder": "https://exemple.com/image.jpg",
+    "statusLabel": "Statut",
+    "statusAvailable": "Disponible",
+    "statusReserved": "Réservé",
+    "statusMaintenance": "Maintenance",
+    "savingButton": "Enregistrement...",
+    "saveButton": "Enregistrer le terrain"
+  },
+  "errorBoundary": {
+    "title": "Une erreur s'est produite",
+    "message": "Nous avons rencontré une erreur inattendue. Veuillez essayer de rafraîchir la page.",
+    "refreshButton": "Rafraîchir la page"
+  },
+  "paymentMethodSelector": {
+    "title": "Sélectionner le mode de paiement",
+    "payOnline": "Payer en ligne",
+    "payOnSpot": "Payer sur place",
+    "processing": "Traitement du paiement..."
+  },
+  "reservationList": {
+    "statusConfirmed": "Confirmée",
+    "statusPending": "En attente",
+    "statusCancelled": "Annulée",
+    "noReservations": "Aucune réservation trouvée.",
+    "userPrefix": "Utilisateur :",
+    "confirmButton": "Confirmer",
+    "cancelButton": "Annuler"
+  },
+  "timeSlotPicker": {
+    "title": "Créneaux horaires disponibles"
+  },
+  "myReservationsPage": {
+    "title": "Mes réservations",
+    "subtitle": "Visualisez et gérez vos réservations",
+    "errorLoading": "Échec du chargement des réservations",
+    "cancelSuccess": "Réservation annulée avec succès",
+    "cancelError": "Échec de l'annulation de la réservation"
+  },
+  "paymentSimulationPage": {
+    "title": "Simulation de paiement",
+    "missingReservationId": "ID de réservation manquant",
+    "errorFetchingPaymentConsole": "Erreur lors de la récupération du paiement :",
+    "errorFetchingPaymentInfo": "Erreur lors de la récupération des informations de paiement",
+    "errorUpdatingPaymentConsole": "Erreur lors de la mise à jour du paiement :",
+    "errorUpdatingPaymentToast": "Erreur lors de la mise à jour du paiement",
+    "paymentSuccessToast": "Paiement réussi !",
+    "paymentFailedToast": "Échec du paiement",
+    "errorProcessingPaymentConsole": "Erreur lors du traitement du paiement :",
+    "errorProcessingPaymentToast": "Une erreur est survenue lors du traitement du paiement",
+    "amountLabel": "Montant :",
+    "reservationIdLabel": "ID de réservation :",
+    "statusLabel": "Statut :",
+    "paymentSuccessStatus": "Paiement réussi",
+    "paymentFailedStatus": "Échec du paiement",
+    "returnButton": "Retour à l'accueil"
+  },
+  "reservationPage": {
+    "localeCode": "fr-FR",
+    "errorLoadingCourt": "Échec du chargement des détails du terrain",
+    "errorLoadingSlots": "Échec du chargement des créneaux disponibles",
+    "errorInvalidSlot": "Veuillez sélectionner un créneau horaire valide",
+    "errorSavingPayment": "Erreur lors de l'enregistrement du paiement",
+    "reservationSuccess": "Réservation créée avec succès !",
+    "reservationError": "Échec de la création de la réservation",
+    "errorInvalidSlotOnline": "Choisissez un créneau valide",
+    "onlinePaymentFailed": "Paiement en ligne échoué : {{message}}",
+    "courtNotFound": "Terrain non trouvé.",
+    "backToCourtsButton": "Retour aux terrains",
+    "backToCourtsLink": "Retour aux terrains",
+    "titleProcessing": "Traitement de la réservation...",
+    "titleMakeReservation": "Faire une réservation",
+    "selectDateLabel": "Sélectionner la date",
+    "summaryTitle": "Résumé de la réservation",
+    "summaryTotalLabel": "Total :"
+  },
+  "homePage": {
+    "errorLoadingGeneric": "Échec du chargement des terrains. Veuillez vérifier la connexion ou réessayer plus tard.",
+    "errorLoadingToast": "Échec du chargement des terrains",
+    "errorLoadingRefresh": "Échec du chargement des terrains. Veuillez essayer de rafraîchir la page.",
+    "title": "Trouvez votre terrain",
+    "subtitle": "Réservez facilement votre terrain de padel préféré",
+    "searchPlaceholder": "Rechercher des terrains...",
+    "refreshButtonTitle": "Rafraîchir les terrains",
+    "errorAuthMessage": "Vous devez être connecté pour voir les terrains.",
+    "loginButton": "Se connecter",
+    "retryButton": "Réessayer",
+    "refreshPageButton": "Rafraîchir la page",
+    "noCourtsFoundSearch": "Aucun terrain trouvé avec vos critères de recherche.",
+    "noCourtsAvailable": "Aucun terrain disponible pour le moment.",
+    "refreshCourtsButton": "Rafraîchir les terrains"
+  }
+} 
