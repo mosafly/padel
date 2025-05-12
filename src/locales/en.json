@@ -39,8 +39,7 @@
   "paymentMethodSelector": {
     "title": "Select payment method",
     "payOnline": "Pay online",
-    "payOnSpot": "Pay on spot",
-    "processing": "Processing payment..."
+    "payOnSpot": "Pay on spot"
   },
   "reservationList": {
     "statusConfirmed": "Confirmed",

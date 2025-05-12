@@ -1,6 +1,7 @@
 import React from "react";
 import { CreditCard, Wallet } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import { Spinner } from "../dashboard/spinner";
 
 interface PaymentMethodSelectorProps {
   onComplete: (method: "online" | "on_spot") => Promise<void>;
@@ -48,7 +49,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       </div>
       {isProcessing && (
         <div className="mt-4 text-center text-sm text-gray-500">
-          {t('paymentMethodSelector.processing')}
+          <Spinner />
         </div>
       )}
     </div>

@@ -351,8 +351,8 @@ const ReservationPage: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-md shadow-sm p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
-          {isSubmitting ? t("reservationPage.titleProcessing") : t("reservationPage.titleMakeReservation")}
+        <h2 className="text-2xl font-bold text-gray-900">
+          {isSubmitting ? <Spinner /> : t("reservationPage.titleMakeReservation")}
         </h2>
 
         <div>

@@ -39,8 +39,7 @@
   "paymentMethodSelector": {
     "title": "Sélectionner le mode de paiement",
     "payOnline": "Payer en ligne",
-    "payOnSpot": "Payer sur place",
-    "processing": "Traitement du paiement..."
+    "payOnSpot": "Payer sur place"
   },
   "reservationList": {
     "statusConfirmed": "Confirmée",
