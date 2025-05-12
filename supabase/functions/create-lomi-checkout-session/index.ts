@@ -91,7 +91,7 @@ serve(async (req: Request) => {
     const payload: LomiPayload = {
       success_url: `${APP_BASE_URL}${successUrlPath}?reservation_id=${reservationId}`,
       cancel_url: `${APP_BASE_URL}${cancelUrlPath}?reservation_id=${reservationId}`,
-      allowed_providers: ["ORANGE", "WAVE"],
+      allowed_providers: ["WAVE"],
       amount: amount, 
       currency_code: currencyCode,
       metadata: metadata,
