@@ -8,7 +8,6 @@ import TimeSlotPicker from "@/components/booking/time-slot-picker";
 import { Calendar, Clock, DollarSign } from "lucide-react";
 import toast from "react-hot-toast";
 import PaymentMethodSelector from "@/components/booking/payment-method-selector";
-import LomiClient from "@/utils/lomi./client";
 import { Spinner } from "@/components/dashboard/spinner";
 import { useTranslation } from "react-i18next";
 import { formatPrice } from "@/lib/actions/helpers";
@@ -19,20 +18,6 @@ const ReservationPage: React.FC = () => {
   const { supabase } = useSupabase();
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
-
-  // Déboguer la clé API lomi.
-  console.log(
-    "VITE_LOMI_SECRET_KEY available?",
-    !!import.meta.env.VITE_LOMI_SECRET_KEY,
-  );
-  console.log(
-    "VITE_LOMI_SECRET_KEY value (masked):",
-    import.meta.env.VITE_LOMI_SECRET_KEY
-      ? `${import.meta.env.VITE_LOMI_SECRET_KEY.substring(0, 10)}...`
-      : "undefined",
-  );
-
-  const lomiClient = new LomiClient(import.meta.env.VITE_LOMI_SECRET_KEY);
 
   const [court, setCourt] = useState<Court | null>(null);
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
@@ -202,7 +187,7 @@ const ReservationPage: React.FC = () => {
         totalPrice,
       );
 
-      // Create the reservation
+      // 1. Create the reservation first (as before)
       const { data: reservationData, error: reservationError } = await supabase
         .from("reservations")
         .insert([
@@ -212,7 +197,7 @@ const ReservationPage: React.FC = () => {
             start_time: selectedStartTime.toISOString(),
             end_time: selectedEndTime.toISOString(),
             total_price: totalPrice,
-            status: "pending",
+            status: "pending", // Status remains pending until payment confirmed
           },
         ])
         .select()
@@ -220,84 +205,85 @@ const ReservationPage: React.FC = () => {
 
       if (reservationError) {
         console.error("Error creating reservation:", reservationError);
-        throw reservationError;
+        throw reservationError; // Let the main catch block handle it
       }
 
       console.log("Reservation created successfully:", reservationData);
+      const reservationId = reservationData.id;
 
-      // Initialize payment with lomi.
-      console.log("Initializing payment session...");
-
-      // Détecter si nous sommes en local ou en production
-      const isLocalhost =
-        window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1";
-
-      // Utiliser l'API réelle de lomi. en production avec Wave comme moyen de paiement
-      const session = await lomiClient.sessionsCreate({
-        amount: totalPrice * 100,
-        currency: "XOF",
-        callback_url: `${window.location.origin}/payment-simulation?reservationId=${reservationData.id}`,
-        // Forcer le mode simulation en local, utiliser le mode réel en production
-        simulation: isLocalhost,
-      });
-
-      console.log("lomi. session created:", session);
-
-      // Create payment record
+      // 2. Create the payment record (status pending)
       const { data: paymentData, error: paymentError } = await supabase
         .from("payments")
         .insert([
           {
-            reservation_id: reservationData.id,
+            reservation_id: reservationId,
             user_id: user.id,
             amount: totalPrice,
-            currency: "XOF",
+            currency: "XOF", // Assuming XOF
             payment_method: "online",
-            payment_provider: "lomi",
-            provider_payment_id: session.id,
-            payment_url: session.payment_url,
-            status: "pending",
+            payment_provider: "lomi", // Indicate Lomi is used
+            status: "pending", // Initial status
+            // provider_payment_id and payment_url will be set by webhook potentially
           },
         ])
         .select()
         .single();
 
       if (paymentError) {
-        console.error("Error creating payment record:", paymentError);
+        // Log the error but attempt to proceed with payment creation
+        console.error("Error creating initial payment record:", paymentError);
         toast.error(t("reservationPage.errorSavingPayment"));
+        // Depending on requirements, you might want to throw here or just warn
       } else {
-        console.log("Payment record created:", paymentData);
+        console.log("Initial payment record created (pending):", paymentData);
       }
 
-      // Redirect to payment page
-      console.log("Redirecting to payment URL:", session.payment_url);
-      window.location.href = session.payment_url;
+
+      // 3. Call the Supabase Edge Function to get the Lomi checkout URL
+      console.log("Calling Supabase function 'create-lomi-checkout-session'...");
+      const { data: functionData, error: functionError } = await supabase.functions.invoke(
+        "create-lomi-checkout-session",
+        {
+          body: {
+            amount: totalPrice,
+            currencyCode: "XOF", // Send currency code
+            reservationId: reservationId,
+            userEmail: user.email,
+            userName: user.user_metadata?.full_name || user.email, // Pass user details
+            // Optionally pass specific success/cancel paths if needed
+            // successUrlPath: "/custom-success",
+            // cancelUrlPath: "/custom-cancel",
+          },
+        },
+      );
+
+      if (functionError) {
+        console.error("Supabase function error:", functionError);
+        throw new Error(`Failed to create payment session: ${functionError.message}`);
+      }
+
+      if (!functionData?.checkout_url) {
+        console.error("Supabase function did not return checkout_url:", functionData);
+        throw new Error("Payment session creation failed (no URL returned).");
+      }
+
+      console.log("Lomi checkout URL received:", functionData.checkout_url);
+
+
+      // 4. Redirect user to Lomi checkout page
+      window.location.href = functionData.checkout_url;
+
+      // No need to set submitting false here, as the page redirects
     } catch (err: unknown) {
-      let errName = "Unknown error";
-      let errMessage = "No error message";
-      let errStack = "No stack trace";
-      const originalError = err;
-
+      let errMessage = "An unknown error occurred during online payment.";
       if (err instanceof Error) {
-        errName = err.name;
         errMessage = err.message;
-        errStack = err.stack || "No stack trace";
       }
-
-      console.error("Online payment error:", {
-        name: errName,
-        message: errMessage,
-        stack: errStack,
-        error: JSON.stringify(
-          originalError,
-          Object.getOwnPropertyNames(originalError || {}),
-        ),
-      });
+      console.error("Online payment process failed:", err);
       toast.error(t("reservationPage.onlinePaymentFailed", { message: errMessage }));
-    } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Set submitting false only on error before redirect
     }
+    // No finally block setting isSubmitting false, because successful path redirects
   };
 
   const hours =
@@ -337,7 +323,7 @@ const ReservationPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-sm shadow-sm overflow-hidden mb-6">
+      <div className="bg-white rounded-md shadow-sm overflow-hidden mb-6">
         <div className="md:flex">
           <div className="md:w-1/3">
             <img
@@ -356,7 +342,7 @@ const ReservationPage: React.FC = () => {
             <div className="mt-4 flex items-center text-gray-700">
               <DollarSign size={20} className="mr-1" />
               <span className="text-lg font-medium">
-                {formatPrice(court.price_per_hour, t("localeCode"), i18n.language === 'fr' ? 'XOF' : 'USD')}
+                {formatPrice(court.price_per_hour, t("reservationPage.localeCode"), i18n.language === 'fr' ? 'XOF' : 'USD')}
                 {' '}{t("courtCard.pricePerHourSuffix")}
               </span>
             </div>
@@ -364,7 +350,7 @@ const ReservationPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-sm shadow-sm p-6">
+      <div className="bg-white rounded-md shadow-sm p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">
           {isSubmitting ? t("reservationPage.titleProcessing") : t("reservationPage.titleMakeReservation")}
         </h2>
@@ -395,7 +381,7 @@ const ReservationPage: React.FC = () => {
           />
 
           {selectedStartTime && selectedEndTime && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-sm">
+            <div className="mt-6 p-4 bg-gray-50 rounded-md">
               <h3 className="font-semibold text-gray-900">
                 {t("reservationPage.summaryTitle")}
               </h3>
@@ -413,7 +399,7 @@ const ReservationPage: React.FC = () => {
                 </div>
                 <div className="flex items-center text-sm text-gray-700">
                   <DollarSign size={16} className="mr-2" />
-                  <span>{t("reservationPage.summaryTotalLabel")} {formatPrice(totalPrice, t("localeCode"), i18n.language === 'fr' ? 'XOF' : 'USD')}</span>
+                  <span>{t("reservationPage.summaryTotalLabel")} {formatPrice(totalPrice, t("reservationPage.localeCode"), i18n.language === 'fr' ? 'XOF' : 'USD')}</span>
                 </div>
               </div>
             </div>

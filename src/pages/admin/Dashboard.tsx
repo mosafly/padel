@@ -196,7 +196,7 @@ const Dashboard: React.FC = () => {
         {stats.map((stat, index) => (
           <div
             key={index}
-            className={`${stat.bgColor} p-6 rounded-sm shadow-sm hover:shadow-md transition-shadow duration-200`}
+            className={`${stat.bgColor} p-6 rounded-md shadow-sm hover:shadow-md transition-shadow duration-200`}
           >
             <div className="flex items-center mb-2">
               <div className="text-[var(--primary)]">{stat.icon}</div>
@@ -209,7 +209,7 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-white rounded-sm shadow-sm p-6">
+      <div className="bg-white rounded-md shadow-sm p-6">
         <h2 className="text-lg font-bold mb-4">Revenue Trend (Last 7 Days)</h2>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
@@ -248,7 +248,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-sm shadow-sm p-6">
+        <div className="bg-white rounded-md shadow-sm p-6">
           <h2 className="text-lg font-bold mb-4">Today's Schedule</h2>
           <div className="space-y-3">
             {reservationsData && reservationsData.length > 0 ? (
@@ -275,7 +275,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-sm shadow-sm p-6">
+        <div className="bg-white rounded-md shadow-sm p-6">
           <h2 className="text-lg font-bold mb-4">Court Status</h2>
           <div className="space-y-3">
             {courtsData && courtsData.length > 0 ? (

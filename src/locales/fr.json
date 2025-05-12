@@ -113,5 +113,18 @@
     "noCourtsFoundSearch": "Aucun terrain trouvé avec vos critères de recherche.",
     "noCourtsAvailable": "Aucun terrain disponible pour le moment.",
     "refreshCourtsButton": "Rafraîchir les terrains"
+  },
+  "paymentSuccessPage": {
+    "title": "Paiement réussi !",
+    "message": "Votre paiement a été traité avec succès. Le statut de votre réservation sera mis à jour sous peu.",
+    "reservationIdLabel": "ID de réservation :",
+    "button": "Voir mes réservations"
+  },
+  "paymentCancelPage": {
+    "title": "Le paiement a échoué",
+    "message": "Votre paiement a été annulé ou n'a pas pu être traité. Veuillez réessayer ou choisir un autre mode de paiement.",
+    "reservationIdLabel": "ID de réservation :",
+    "backButton": "Retour aux terrains",
+    "retryButton": "Réessayer"
   }
 } 

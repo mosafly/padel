@@ -79,7 +79,7 @@ const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
               }
               disabled={!slot.isAvailable}
               className={`
-                px-3 py-2 rounded-sm text-center text-sm transition-colors
+                px-3 py-2 rounded-md text-center text-sm transition-colors
                 ${isSelected
                   ? "bg-[var(--primary)] text-white"
                   : slot.isAvailable

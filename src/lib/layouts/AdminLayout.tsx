@@ -62,7 +62,7 @@ const AdminLayout: React.FC = () => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center px-4 py-3 text-sm font-medium rounded-sm ${isActive
+        `flex items-center px-4 py-3 text-sm font-medium rounded-md ${isActive
           ? "bg-[var(--primary)] text-white"
           : "text-gray-700 hover:bg-gray-100"
         }`

@@ -19,7 +19,8 @@ import AdminLayout from "./lib/layouts/AdminLayout";
 import HomePage from "./pages/client/HomePage";
 import ReservationPage from "./pages/client/ReservationPage";
 import MyReservationsPage from "./pages/client/MyReservationsPage";
-import PaymentSimulationPage from "./pages/client/PaymentSimulationPage";
+import PaymentSuccessPage from "./pages/client/PaymentSuccessPage";
+import PaymentCancelPage from "./pages/client/PaymentCancelPage";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -55,12 +56,6 @@ const ProtectedRoute = ({
     return <Navigate to="/login" replace />;
   }
 
-  console.log("ProtectedRoute checking roles:", {
-    user,
-    userRole,
-    requiredRole,
-  });
-
   if (requiredRole && !userRole) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -72,7 +67,6 @@ const ProtectedRoute = ({
   }
 
   if (requiredRole && userRole !== requiredRole) {
-    console.log("Role mismatch, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
@@ -110,8 +104,12 @@ function App() {
                   element={<MyReservationsPage />}
                 />
                 <Route
-                  path="payment-simulation"
-                  element={<PaymentSimulationPage />}
+                  path="payment/success"
+                  element={<PaymentSuccessPage />}
+                />
+                <Route
+                  path="payment/cancel"
+                  element={<PaymentCancelPage />}
                 />
               </Route>
 

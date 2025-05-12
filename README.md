@@ -71,4 +71,9 @@ supabase link
 supabase db push
 ```
 
+Active docker then
+
+supabase functions deploy create-lomi-checkout-session --no-verify-jwt
+
+
 The application should now be running on your local development server (usually `http://localhost:5173` or similar).

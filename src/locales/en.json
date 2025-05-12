@@ -113,5 +113,18 @@
     "noCourtsFoundSearch": "No courts found with your search criteria.",
     "noCourtsAvailable": "No courts available at the moment.",
     "refreshCourtsButton": "Refresh courts"
+  },
+  "paymentSuccessPage": {
+    "title": "Payment successful!",
+    "message": "Your payment has been processed successfully. Your reservation status will be updated shortly.",
+    "reservationIdLabel": "Reservation ID:",
+    "button": "View my reservations"
+  },
+  "paymentCancelPage": {
+    "title": "Payment cancelled or failed",
+    "message": "Your payment was cancelled or could not be processed. Please try again or choose a different payment method.",
+    "reservationIdLabel": "Reservation ID:",
+    "backButton": "Back to courts",
+    "retryButton": "Try again"
   }
 } 
